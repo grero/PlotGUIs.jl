@@ -1,0 +1,6 @@
+authors = ["roger <roger.herikstad@gmail.com>"]
+name = "PlotGUIs"
+uuid = "9da0bc4c-0e6a-11e9-2aad-b1192e9ce850"
+version = "0.1.0"
+
+[deps]
