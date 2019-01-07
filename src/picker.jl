@@ -1,4 +1,4 @@
-function pick_lines(t::AbstractVector{Float64}, X::Matrix{Float64})
+function pick_lines(t::AbstractVector{Float64}, X::Matrix{Float64},color=fill(RGB(0.0, 0.0, 0.0), size(X,2)))
     scene = Scene()
     poprect = map(scene.px_area) do pa
         _origin = pa.origin
@@ -36,7 +36,7 @@ function pick_lines(t::AbstractVector{Float64}, X::Matrix{Float64})
         lw
     end
     for i in 1:size(X,2)
-        lines!(scene, t, X[:,i])
+        lines!(scene, t, X[:,i],color=color[i])
     end
     on(linewidths) do lw
         for i in 1:length(lw)
