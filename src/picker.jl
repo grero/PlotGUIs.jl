@@ -43,6 +43,30 @@ function pick_lines(t::AbstractVector{Float64}, X::Matrix{Float64},color=fill(RG
             push!(scene.plots[i+1][:linewidth],lw[i])
         end
     end
-
     scene
+end
+
+"""
+Creates a scatter plot of the features in `features` and connects each point to the data in `X`.
+"""
+function plot_features(X::Matrix{Float64},features::Matrix{Float64},bins=range(0.0,stop=1.0, length=size(X,1)))
+    fscene = scatter(features[:,1], features[:,2])
+    xscene = lines(bins, dropdims(mean(X,dims=2),dims=2))
+    selected_point = map(fscene.events.mousebuttons) do buttons
+        if ispressed(fscene, Mouse.left)
+            pos = to_world(fscene, Point2f0(fscene.events.mouseposition[]))
+            idx = argmin(map(i->(features[i,1] - pos[1])^2 + (features[i,2] - pos[2])^2,1:size(features,1)))
+        else
+            idx = 0
+        end
+        idx
+    end
+    map(selected_point) do ii
+        if 0 < ii <= size(X,2)
+            xscene.plots[2][2] = X[:,ii]
+            AbstractPlotting.update!(xscene)
+            AbstractPlotting.update_limits!(xscene)
+        end
+    end
+    hbox(fscene,xscene)
 end
