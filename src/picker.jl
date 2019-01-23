@@ -49,13 +49,18 @@ end
 """
 Creates a scatter plot of the features in `features` and connects each point to the data in `X`.
 """
-function plot_features(X::Matrix{Float64},features::Matrix{Float64},bins=range(0.0,stop=1.0, length=size(X,1)))
-    fscene = scatter(features[:,1], features[:,2])
+function plot_features(X::Matrix{Float64},features::Matrix{Float64},bins=range(0.0,stop=1.0, length=size(X,1));color=fill(parse(Colorant,"black"), size(features,1)))
+    mi,mx = extrema(features[:,[1,2]][:])
+    ps = 0.05*(mx-mi)  # set pointsize to 1% of the data range
+    fscene = scatter(features[:,1], features[:,2],markersize=fill(ps, size(features,1)),color=color)
     xscene = lines(bins, dropdims(mean(X,dims=2),dims=2))
     selected_point = map(fscene.events.mousebuttons) do buttons
+        ms = fill(ps, size(features,1))
         if ispressed(fscene, Mouse.left)
             pos = to_world(fscene, Point2f0(fscene.events.mouseposition[]))
             idx = argmin(map(i->(features[i,1] - pos[1])^2 + (features[i,2] - pos[2])^2,1:size(features,1)))
+            ms[idx] *= 1.5
+            push!(fscene.plots[2][:markersize], ms)
         else
             idx = 0
         end
@@ -64,6 +69,7 @@ function plot_features(X::Matrix{Float64},features::Matrix{Float64},bins=range(0
     map(selected_point) do ii
         if 0 < ii <= size(X,2)
             xscene.plots[2][2] = X[:,ii]
+            push!(xscene.plots[2][:color], color[ii])
             AbstractPlotting.update!(xscene)
             AbstractPlotting.update_limits!(xscene)
         end
