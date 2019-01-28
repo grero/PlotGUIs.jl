@@ -1,6 +1,6 @@
 import Base.show
 
-struct ZoomScene
+mutable struct ZoomScene
     scene
     fs::Float64
     nlines::Int64
