@@ -1,5 +1,6 @@
 struct EventScene
     scene
+    sampling_rate
 end
 
 Base.display(x,escene::EventScene) = display(x, escene.scene)
@@ -16,5 +17,5 @@ function plot_events(data::Matrix{T}, events::Vector{Int64};fs=30_000.0) where T
             push!(s1[end][:value], events[sp]/fs)
         end
     end
-    EventsScene(hbox(zscene,fscene))
+    EventsScene(hbox(zscene.scene,fscene.scene),fs)
 end
