@@ -55,8 +55,9 @@ function plot_zoom!(zscene::ZoomScene, data::Vector{T};fs=30_000,timestep=0.1,nm
         idx1 = round(Int64,_ss1*fs+1)
         idx2 = idx1 + round(Int64,_ss2*fs)
         if idx2 <= size(data,1)
+            ymin,ymax = extrema(data[idx1:idx2])
             push!(scene.plots[zscene.nlines+1][1],[Point2f0(x,y) for (x,y) in zip(range(_ss1,stop=_ss1+_ss2, length=idx2-idx1+1), data[idx1:idx2])])
-            AbstractPlotting.update_limits!(scene)
+            AbstractPlotting.update_limits!(scene, FRect(Point2f0(_ss1, ymin), (_ss2, ymax-ymin)))
             AbstractPlotting.update!(scene)
         end
     end
