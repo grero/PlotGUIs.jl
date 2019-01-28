@@ -50,7 +50,7 @@ function plot_zoom!(zscene::ZoomScene, data::Vector{T};fs=30_000,timestep=0.1,nm
     s2 = zscene.scene.children[1].children[2]
     scene = zscene.scene.children[2]
     lines!(scene, [0.0], [0.0])[end]
-    zscene.nlines .+= 1
+    zscene.nlines += 1
     map(s1[end][:value],s2[end][:value]) do _ss1, _ss2
         idx1 = round(Int64,_ss1*fs+1)
         idx2 = idx1 + round(Int64,_ss2*fs)
