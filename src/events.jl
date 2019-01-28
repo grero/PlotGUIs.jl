@@ -7,8 +7,9 @@ Base.display(x,escene::EventsScene) = display(x, escene.scene)
 
 function plot_events(data::Matrix{T}, events::Vector{Int64};fs=30_000.0) where T <: Real
     zscene = plot_zoom(data[1,:],fs=fs)
-    lines!(zscene.scene, fill(0.0, 10), range(0.0, stop=0.1,length=10),color="red")
+    #dummy line just to have something that we can modify later
     plot_zoom!(zscene, data[2,:], fs=fs)
+    lines!(zscene.scene, fill(0.0, 10), range(0.0, stop=0.1,length=10),color="red")
     s1 = zscene.scene.children[1].children[1]
     s2 = zscene.scene.children[1].children[2]
     features = permutedims(Float64.(data[:,events]),[2,1])
