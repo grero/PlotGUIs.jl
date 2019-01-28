@@ -18,6 +18,7 @@ function plot_events(data::Matrix{T}, events::Vector{Int64};fs=30_000.0) where T
     map(fscene.selected_point) do sp
         if 0 < sp <= size(data,2)
             w = s2[end][:value][]
+            @show w
             t0 = events[sp]/fs
             push!(s1[end][:value], t0-w/2.0)
             ymin,ymax = extrema(zscene.scene.children[2][1][:ticks, :ranges][][2])
