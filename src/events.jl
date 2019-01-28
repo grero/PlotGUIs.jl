@@ -1,9 +1,9 @@
-struct EventScene
+struct EventsScene
     scene
     sampling_rate
 end
 
-Base.display(x,escene::EventScene) = display(x, escene.scene)
+Base.display(x,escene::EventsScene) = display(x, escene.scene)
 
 function plot_events(data::Matrix{T}, events::Vector{Int64};fs=30_000.0) where T <: Real
     zscene = plot_zoom(data[1,:],fs=fs)
