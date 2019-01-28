@@ -12,7 +12,7 @@ function plot_events(data::Matrix{T}, events::Vector{Int64};fs=30_000.0) where T
     fscene = plot_features(features)
     #connect the selected point feature of fscene
     map(fscene.selected_point) do sp
-        push!(s1[:value], events[sp]/fs)
+        push!(s1[end][:value], events[sp]/fs)
     end
     EventsScene(hbox(zscene,fscene))
 end
