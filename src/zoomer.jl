@@ -1,3 +1,6 @@
+"""
+Plots the timeseries represented by `data`, recorded at a sampling rate of `fs` Hz. The optional keyword `nmax` specifies the maximum number of points to draw and thus represents the smallest zoom level. Drag the left slider to center the plot on a time time point. Drag the right slider to zoom in/out. 
+"""
 function plot_zoom(data::Vector{T};fs=30_000,timestep=0.1,nmax=100_000) where T <: Real
     wmax = nmax/fs
     t = range(0.0, step=timestep, stop=(size(data,1)-1)/fs)
