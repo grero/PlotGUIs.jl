@@ -1,4 +1,4 @@
-type FeatureScene
+struct FeatureScene
     scene
     selected_point
 end
