@@ -1,3 +1,12 @@
+import Base.show
+
+struct ZoomScene
+    scene
+    fs::Float64
+end
+
+Base.display(x, zscene::ZoomScene) = display(x,zscene.scene)
+
 """
 Plots the timeseries represented by `data`, recorded at a sampling rate of `fs` Hz. The optional keyword `nmax` specifies the maximum number of points to draw and thus represents the smallest zoom level. Drag the left slider to center the plot on a time time point. Drag the right slider to zoom in/out. 
 """
@@ -31,5 +40,23 @@ function plot_zoom(data::Vector{T};fs=30_000,timestep=0.1,nmax=100_000) where T 
             AbstractPlotting.update!(scene)
         end
     end
-    hbox(vbox(s1,s2),scene)
+    ZoomScene(hbox(vbox(s1,s2),scene),fs)
+end
+
+function plot_zoom!(zscene::ZoomScene, data::Vector{T};fs=30_000,timestep=0.1,nmax=100_000) where T <: Real
+    fs == zscene.fs || ArgumentError("Signals must be sampled at the same sampling rate")
+    s1 = zscene.scene.children[1].children[1]
+    s2 = zscene.scene.children[1].children[2]
+    scene = zscene.scene.children[2]
+    lines!(scene, [0.0], [0.0])[end]
+    map(s1[end][:value],s2[end][:value]) do _ss1, _ss2
+        idx1 = round(Int64,_ss1*fs+1)
+        idx2 = idx1 + round(Int64,_ss2*fs)
+        if idx2 <= size(data,1)
+            push!(scene.plots[end][1],[Point2f0(x,y) for (x,y) in zip(range(_ss1,stop=_ss1+_ss2, length=idx2-idx1+1), data[idx1:idx2])])
+            AbstractPlotting.update_limits!(scene)
+            AbstractPlotting.update!(scene)
+        end
+    end
+    zscene
 end
