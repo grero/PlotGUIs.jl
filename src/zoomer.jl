@@ -1,7 +1,8 @@
-function plot_zoom(data::Vector{T};fs=30_000,timestep=0.1) where T <: Real
-    t = range(0.0, step=timestep, stop=(size(mlseq,2)-1)/fs)
+function plot_zoom(data::Vector{T};fs=30_000,timestep=0.1,nmax=100_000) where T <: Real
+    wmax = nmax/fs
+    t = range(0.0, step=timestep, stop=(size(data,1)-1)/fs)
     s1,a = AbstractPlotting.textslider(t, "t0", start=first(t))
-    s2,b = AbstractPlotting.textslider(range(0.001, step=0.001,stop=1.0), "window", start=timestep)
+    s2,b = AbstractPlotting.textslider(range(0.001, step=0.001,stop=wmax), "window", start=timestep)
     scene = Scene()
     lines!(scene, [0.0], [0.0])[end]
     map(scene.events.mousebuttons) do buttons
