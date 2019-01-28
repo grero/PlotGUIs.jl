@@ -21,7 +21,7 @@ function plot_events(data::Matrix{T}, events::Vector{Int64};fs=30_000.0) where T
             t0 = events[sp]/fs
             push!(s1[end][:value], t0-w/2.0)
             ymin,ymax = extrema(zscene.scene.children[2][1][:ticks, :ranges][][2])
-            push!(zscene.scene.plots[zscene.nlines+2][1],[Point2f0(t0,_y) for _y in range(ymin,stop=ymax,length=10)])
+            push!(zscene.scene.children[2].plots[zscene.nlines+2][1],[Point2f0(t0,_y) for _y in range(ymin,stop=ymax,length=10)])
         end
     end
     EventsScene(hbox(zscene.scene,fscene.scene),fs)
