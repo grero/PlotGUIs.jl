@@ -100,5 +100,5 @@ function plot_features(features::Matrix{Float64};color=fill(parse(Colorant,"blac
         end
         idx
     end
-    FeatureScene(scene,selected_point)
+    FeatureScene(fscene,selected_point)
 end
