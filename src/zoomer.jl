@@ -23,7 +23,7 @@ function plot_zoom(data::Vector{T};fs=30_000,timestep=0.1,nmax=100_000) where T 
         idx1 = round(Int64,_ss1*fs+1)
         idx2 = idx1 + round(Int64,_ss2*fs)
         if idx2 <= size(data,1)
-            push!(scene.plots[3][1],[Point2f0(x,y) for (x,y) in zip(range(_ss1,stop=_ss1+_ss2, length=idx2-idx1+1), data[idx1:idx2])])
+            push!(scene.plots[2][1],[Point2f0(x,y) for (x,y) in zip(range(_ss1,stop=_ss1+_ss2, length=idx2-idx1+1), data[idx1:idx2])])
             AbstractPlotting.update_limits!(scene)
             AbstractPlotting.update!(scene)
         end
