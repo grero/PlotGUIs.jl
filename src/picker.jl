@@ -1,3 +1,10 @@
+struct FeatureScene
+    scene
+    selected_point
+end
+
+Base.display(x, fscene::FeatureScene) = display(x, fscene.scene)
+
 function pick_lines(t::AbstractVector{Float64}, X::Matrix{Float64},color=fill(RGB(0.0, 0.0, 0.0), size(X,2)))
     scene = Scene()
     poprect = map(scene.px_area) do pa
@@ -75,4 +82,24 @@ function plot_features(X::Matrix{Float64},features::Matrix{Float64},bins=range(0
         end
     end
     hbox(fscene,xscene)
+end
+
+function plot_features(features::Matrix{Float64};color=fill(parse(Colorant,"black"), size(features,1)))
+    mi,mx = extrema(features[:,[1,2]][:])
+    ps = 0.05*(mx-mi)  # set pointsize to 1% of the data range
+    fscene = scatter(features[:,1], features[:,2],markersize=fill(ps, size(features,1)),color=color)
+    selected_point = map(fscene.events.mousebuttons) do buttons
+        idx = 0
+        if AbstractPlotting.is_mouseinside(fscene)
+            ms = fill(ps, size(features,1))
+            if ispressed(fscene, Mouse.left)
+                pos = to_world(fscene, Point2f0(fscene.events.mouseposition[]))
+                idx = argmin(map(i->(features[i,1] - pos[1])^2 + (features[i,2] - pos[2])^2,1:size(features,1)))
+                ms[idx] *= 1.5
+                push!(fscene.plots[2][:markersize], ms)
+            end
+        end
+        idx
+    end
+    FeatureScene(fscene,selected_point)
 end
