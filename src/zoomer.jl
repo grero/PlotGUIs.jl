@@ -39,7 +39,6 @@ function plot_zoom(data::Vector{T};fs=30_000,timestep=0.1,nmax=100_000) where T 
             push!(scene.plots[2][1],[Point2f0(x,y) for (x,y) in zip(range(_ss1,stop=_ss1+_ss2, length=idx2-idx1+1), data[idx1:idx2])])
             ymin,ymax = extrema(data[idx1:idx2])
             new_limits = FRect(Point2f0(_ss1, ymin), Point2f0(_ss2, ymax-ymin))
-            @show new_limits
             AbstractPlotting.update_limits!(scene, new_limits)
             AbstractPlotting.update!(scene)
         end
